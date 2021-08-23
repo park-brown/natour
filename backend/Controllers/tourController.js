@@ -31,7 +31,7 @@ exports.getAllTours = async (req, res) => {
   } catch (error) {
     res.status(404).json({
       status: 'rejected',
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -65,7 +65,7 @@ exports.createTour = async (req, res) => {
     res.status(400).json({
       status: 'rejected',
       data: {
-        message: 'Invalid data sent',
+        message: error.message,
       },
     });
   }

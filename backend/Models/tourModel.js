@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const slugify = require('slugify');
 const tourSchema = new mongoose.Schema(
   {
     name: {
@@ -82,7 +82,40 @@ const tourSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+tourSchema.virtual('durationWeeks').get(function () {
+  return this.duration / 7;
+});
+//Document middleware : runs before save() and create()
+tourSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true }); // this point to the current processing doc
+  next();
+});
+//Document middleware : runs after save() and create(), have no access to this key word
+tourSchema.post('save', function (doc, next) {
+  // console.log(doc);
+  next();
+});
 
+//query middleware
+tourSchema.pre(/^find/, function (next) {
+  // /^find/, trigger this middleware when any query that starts with find executed
+  this.find({ secretTour: { $ne: true } }); // in query middleware, this points to query object
+
+  this.start = Date.now();
+  next();
+});
+tourSchema.post(/^find/, function (docs, next) {
+  console.log(`query took ${Date.now() - this.start} milliseconds`);
+
+  next();
+});
+
+//aggregation middleware
+tourSchema.post('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+
+  next();
+});
 const Tour = mongoose.model('Tour', tourSchema);
 
 module.exports = Tour;
