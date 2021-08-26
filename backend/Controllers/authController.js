@@ -83,7 +83,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   // 2) Verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
-  // 3) Check if user still exists
+  // 3) Check if user still exists, once deleteMe happen, pre find hook will run
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
     return next(
@@ -188,19 +188,25 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
-  // 1) Get user from collection
+  // 1) Get user from collection, check if user knows the current password
   const user = await User.findById(req.user.id).select('+password');
 
   // 2) Check if POSTed current password is correct
-  if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
+  const isCorrect = await user.correctPassword(
+    req.body.passwordCurrent,
+    user.password
+  );
+  if (!isCorrect) {
     return next(new AppError('Your current password is wrong.', 401));
   }
 
   // 3) If so, update password
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
-  await user.save();
   // User.findByIdAndUpdate will NOT work as intended!
+  //1) passwordConfirm field schema validation will not work,
+  //2) pre save middleware will not run if you use findbyidandupdate
+  await user.save();
 
   // 4) Log user in, send JWT
   createSendToken(user, 200, res);

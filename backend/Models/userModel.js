@@ -91,7 +91,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   return false;
 };
 userSchema.methods.createPasswordResetToken = function () {
-  const resetToken = crypto.randomBytes(32).toString('hex'); //
+  const resetToken = crypto.randomBytes(32).toString('hex'); //in instance method this always points to the current document
 
   this.passwordResetToken = crypto
     .createHash('sha256')
