@@ -10,10 +10,15 @@ const {
   getTourStats,
   getMonthlyPlan,
 } = require('../Controllers/tourController');
+const { protect, restrictTo } = require('../Controllers/authController');
 router.route('/top-5-tours').get(AliasTop5Tours, getAllTours);
 router.route('/tour-statistic').get(getTourStats);
 router.route('/monthly-plan/:year').get(getMonthlyPlan);
-router.route('/').get(getAllTours).post(createTour); //chain middleware
-router.route('/:id').get(getTour).patch(updateTour).delete(deleteTour);
+router.route('/').get(protect, getAllTours).post(createTour); //chain middleware
+router
+  .route('/:id')
+  .get(getTour)
+  .patch(updateTour)
+  .delete(protect, restrictTo(['admin', 'lead-guide']), deleteTour);
 
 module.exports = router;
