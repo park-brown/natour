@@ -62,7 +62,7 @@ userSchema.pre('save', async function (next) {
 userSchema.pre('save', function (next) {
   if (!this.isModified('password') || this.isNew) return next();
 
-  this.passwordChangedAt = Date.now() - 1000;
+  this.passwordChangedAt = Date.now() - 1000; //  the current document been saved to DB hanppens a bit later after issuing JWT web token
   next();
 });
 userSchema.pre(/^find/, function (next) {
@@ -98,7 +98,7 @@ userSchema.methods.createPasswordResetToken = function () {
     .update(resetToken)
     .digest('hex');
 
-  this.passwordResetExpires = Date.now() + 10 * 60 * 1000; // token expires in 10 minutes
+  this.passwordResetExpires = Date.now() + 15 * 60 * 1000; // token expires in 15 minutes
 
   return resetToken;
 };

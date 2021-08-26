@@ -1,4 +1,5 @@
 const { promisify } = require('util');
+const crypto = require('crypto');
 const User = require('../Models/userModel');
 const jwt = require('jsonwebtoken');
 const catchAsync = require('../utilities/catchAsync');
@@ -127,7 +128,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 2) Generate the random reset token
   const resetToken = user.createPasswordResetToken();
 
-  await user.save({ validateBeforeSave: false }); // devalidate the schema in mongoose
+  await user.save({ validateBeforeSave: false }); // turn off the validation schema in mongoose
 
   // 3) Send it to user's email
   const resetURL = `${req.protocol}://${req.get(
