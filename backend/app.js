@@ -41,7 +41,14 @@ app.use(xssClean());
 // prevent http parameter pollution
 app.use(
   hpp({
-    whitelist: ['duration'],
+    whitelist: [
+      'duration',
+      'ratingsQuantity',
+      'ratingsAverage',
+      'maxGroupSize',
+      'difficulty',
+      'price',
+    ],
   })
 );
 // Tour Routes
