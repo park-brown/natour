@@ -14,7 +14,10 @@ const { protect, restrictTo } = require('../Controllers/authController');
 router.route('/top-5-tours').get(AliasTop5Tours, getAllTours);
 router.route('/tour-statistic').get(getTourStats);
 router.route('/monthly-plan/:year').get(getMonthlyPlan);
-router.route('/').get(protect, getAllTours).post(createTour); //chain middleware
+router
+  .route('/')
+  .get(getAllTours)
+  .post(protect, restrictTo(['admin', 'lead-guide']), createTour); //chain middleware
 router
   .route('/:id')
   .get(getTour)

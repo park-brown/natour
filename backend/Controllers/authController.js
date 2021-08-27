@@ -15,7 +15,7 @@ const createSendToken = (user, statusCode, res) => {
 
   const cookieOptions = {
     expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000 // expires in 90 days
     ),
     httpOnly: true,
   };
@@ -83,7 +83,8 @@ exports.protect = catchAsync(async (req, res, next) => {
   // 2) Verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
-  // 3) Check if user still exists, once deleteMe happen, pre find hook will run
+  // 3) Check if user still exists,
+  //once deleteMe happen,set active field to false, pre find hook will run, return user with active field not euqal to false
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
     return next(
