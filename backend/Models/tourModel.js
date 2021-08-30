@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+const User = require('./userModel');
 const tourSchema = new mongoose.Schema(
   {
     name: {
@@ -100,6 +101,13 @@ const tourSchema = new mongoose.Schema(
         day: Number,
       },
     ],
+    //child reference
+    guides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   {
     toJSON: { virtuals: true },
@@ -126,6 +134,15 @@ tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } }); // in query middleware, this points to query object
 
   this.start = Date.now();
+  next();
+});
+// populate
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangedAt', // exclude __v and passwordChangedAt field from output
+  });
+
   next();
 });
 tourSchema.post(/^find/, function (docs, next) {
