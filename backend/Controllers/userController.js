@@ -1,6 +1,7 @@
 const catchAsync = require('../utilities/catchAsync');
 const User = require('../Models/userModel');
 const AppError = require('../utilities/AppError');
+const { deleteOne, updateOne, getOne, getAll } = require('./handlerFactory');
 const filterObj = (obj, allowedFields) => {
   const newObj = {};
   Object.keys(obj).forEach((el) => {
@@ -13,37 +14,11 @@ const filterObj = (obj, allowedFields) => {
   //  }
   return newObj;
 };
-//User Route handlers
-exports.getAllUsers = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'this route has not been implemented yet',
-  });
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
 };
-exports.createUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'this route has not been implemented yet',
-  });
-};
-exports.getUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'this route has not been implemented yet',
-  });
-};
-exports.updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'this route has not been implemented yet',
-  });
-};
-exports.deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'this route has not been implemented yet',
-  });
-};
+
 exports.updateMe = catchAsync(async (req, res, next) => {
   // 1) Create error if user POSTs password data
   if (req.body.password || req.body.passwordConfirm) {
@@ -56,8 +31,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   }
 
   // 2) Filtered out unwanted fields names that are not allowed to be updated
-  const allowedFields = ['name', 'email'];
-  const filteredBody = filterObj(req.body, allowedFields);
+  const filteredBody = filterObj(req.body, 'name', 'email');
 
   // 3) Update user document
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
@@ -81,3 +55,17 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
     data: null,
   });
 });
+
+exports.createUser = (req, res) => {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not defined! Please use /signup instead',
+  });
+};
+
+exports.getUser = getOne(User);
+exports.getAllUsers = getAll(User);
+
+// Do NOT update passwords with this!
+exports.updateUser = updateOne(User);
+exports.deleteUser = deleteOne(User);

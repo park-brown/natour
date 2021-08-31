@@ -11,6 +11,11 @@ const {
   getMonthlyPlan,
 } = require('../Controllers/tourController');
 const { protect, restrictTo } = require('../Controllers/authController');
+const reviewRouter = require('./reviewRoutes');
+// POST /tour/234fad4/reviews
+// GET /tour/234fad4/reviews
+// nested routes
+router.use('/:tourId/reviews', reviewRouter);
 router.route('/top-5-tours').get(AliasTop5Tours, getAllTours);
 router.route('/tour-statistic').get(getTourStats);
 router.route('/monthly-plan/:year').get(getMonthlyPlan);

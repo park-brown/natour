@@ -117,6 +117,12 @@ const tourSchema = new mongoose.Schema(
 tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
+// Virtual populate, a tour may have a ton of reviews, so better off use virual property
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id', // look up review collections where tour field matches tour collections _id
+});
 //Document middleware : runs before save() and create()
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true }); // this point to the current processing doc

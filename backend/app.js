@@ -2,6 +2,7 @@ const express = require('express');
 const rateLimit = require('express-rate-limit');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
+const reviewRouter = require('./routes/reviewRoutes');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
@@ -51,11 +52,12 @@ app.use(
     ],
   })
 );
-// Tour Routes
-app.use('/api/v1/users', userRouter);
 // User Routes
+app.use('/api/v1/users', userRouter);
+//Tour Routes
 app.use('/api/v1/tours', tourRouter);
-
+//review Routes
+app.use('/api/v1/reviews', reviewRouter);
 app.all('*', (req, res, next) => {
   next(new AppError(`can't find ${req.originalUrl} on this server`, 404));
 });
