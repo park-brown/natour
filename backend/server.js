@@ -22,7 +22,7 @@ mongoose
 // dotenv config should run before app init
 const app = require('./app');
 // Start the server
-const port = process.env.PORT || 3000;
+
 process.on('uncaughtException', (err) => {
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
   console.log(err.name, err.message);
@@ -35,6 +35,7 @@ process.on('unhandledRejection', (err) => {
     process.exit(1);
   });
 });
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`App running on PORT ${port}...`);
 });
