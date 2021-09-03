@@ -5,6 +5,7 @@ const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const morgan = require('morgan');
 const helmet = require('helmet');
+const compression = require('compression');
 const mongoSanitize = require('express-mongo-sanitize');
 const xssClean = require('xss-clean');
 const hpp = require('hpp');
@@ -52,6 +53,7 @@ app.use(
     ],
   })
 );
+app.use(compression());
 // User Routes
 app.use('/api/v1/users', userRouter);
 //Tour Routes
