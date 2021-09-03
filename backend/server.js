@@ -1,10 +1,11 @@
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 dotenv.config({
-  path: './config.env',
+  path: `./config.env`,
 });
 
 // connect db
+console.log(process.env.DATABASE);
 const DB = process.env.DATABASE.replace(
   '<PASSWORD>',
   process.env.DATABASE__PASSWORD
@@ -36,7 +37,7 @@ process.on('unhandledRejection', (err) => {
   });
 });
 // const port = process.env.PORT || 3000;
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`App running on PORT ${PROT}...`);
+const port = process.env.PORT || 5000;
+app.listen(port, () => {
+  console.log(`App running on PORT ${port}...`);
 });
