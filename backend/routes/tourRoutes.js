@@ -9,11 +9,12 @@ const {
   AliasTop5Tours,
   getTourStats,
   getMonthlyPlan,
+  getToursWithin,
+  getDistances,
 } = require('../Controllers/tourController');
 const { protect, restrictTo } = require('../Controllers/authController');
 const reviewRouter = require('./reviewRoutes');
-// POST /tour/234fad4/reviews
-// GET /tour/234fad4/reviews
+
 // nested routes
 router.use('/:tourId/reviews', reviewRouter);
 router.route('/top-5-tours').get(AliasTop5Tours, getAllTours);
@@ -29,4 +30,11 @@ router
   .patch(protect, restrictTo(['admin', 'lead-guide']), updateTour)
   .delete(protect, restrictTo(['admin', 'lead-guide']), deleteTour);
 
+router
+  .route('/tours-within/:distance/center/:latlng/unit/:unit')
+  .get(getToursWithin);
+// /tours-within?distance=233&center=-40,45&unit=mi
+// /tours-within/233/center/-40,45/unit/mi
+
+router.route('/distances/:latlng/unit/:unit').get(getDistances);
 module.exports = router;
