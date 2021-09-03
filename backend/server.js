@@ -35,7 +35,8 @@ process.on('unhandledRejection', (err) => {
     process.exit(1);
   });
 });
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`App running on PORT ${port}...`);
+// const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`App running on PORT ${PROT}...`);
 });
