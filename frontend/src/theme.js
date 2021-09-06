@@ -1,5 +1,16 @@
-import { createTheme } from '@material-ui/core/styles';
+import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 
-const theme = createTheme({});
+let theme = createTheme({
+	breakpoints: {
+		values: {
+			xs: 0,
+			sm: 774,
+			md: 980,
+			lg: 1280,
+			xl: 1640
+		}
+	}
+});
+theme = responsiveFontSizes(theme);
 
 export default theme;
