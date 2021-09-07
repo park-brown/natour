@@ -98,7 +98,7 @@ const CardFooter = styled(Box, { name: 'tour-card-footer' })(({ theme }) => ({
 	gridTemplateColumns: 'auto 1fr',
 	gap: '0 1rem'
 }));
-const DetailButton = styled(Button, { name: 'tour-card-detail-button' })(({ theme }) => ({
+export const DetailButton = styled(Button, { name: 'tour-card-detail-button' })(({ theme }) => ({
 	[theme.breakpoints.up('xs')]: {
 		...theme.typography.subtitle1,
 		padding: '0.5rem 1rem',

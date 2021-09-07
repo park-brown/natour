@@ -60,9 +60,9 @@ const Home = () => {
 			<LayOutContainer>
 				<LayOut>
 					<TourCard />
+					{/* <TourCard />
 					<TourCard />
-					<TourCard />
-					<TourCard />
+					<TourCard /> */}
 				</LayOut>
 			</LayOutContainer>
 		</Container>

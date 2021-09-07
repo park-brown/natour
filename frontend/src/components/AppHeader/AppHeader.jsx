@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import { AppBar, Box, Toolbar, Typography, CssBaseline, useScrollTrigger, Button } from '@mui/material';
-
+import { Link } from 'react-router-dom';
 function ElevationScroll(props) {
 	const { children, window } = props;
 	// Note that you normally won't need to set the window ref as useScrollTrigger
@@ -73,8 +73,12 @@ const AppHeader = (props) => {
 							Natours
 						</GradientText>
 						<ButtonContainer>
-							<HeaderButton variant='outlined'>log in</HeaderButton>
-							<HeaderButton variant='outlined'>sign up</HeaderButton>
+							<HeaderButton component={Link} variant='outlined' to='/login'>
+								log in
+							</HeaderButton>
+							<HeaderButton component={Link} variant='outlined' to='/signup'>
+								sign up
+							</HeaderButton>
 						</ButtonContainer>
 					</Toolbar>
 				</AppBar>
