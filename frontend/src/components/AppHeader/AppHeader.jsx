@@ -29,7 +29,7 @@ const GradientText = styled(Typography, { name: 'appbar-brand-name' })(({ theme 
 		cursor: 'pointer'
 	}
 }));
-const Logo = styled('figure', { name: 'natour-logo' })(({ theme }) => ({
+const Logo = styled(Box, { name: 'natour-logo' })(({ theme }) => ({
 	cursor: 'pointer',
 	margin: '0 8px 0 0 ',
 	width: '46.8px',
@@ -68,8 +68,8 @@ const AppHeader = (props) => {
 			<ElevationScroll {...props}>
 				<AppBar color='inherit'>
 					<Toolbar>
-						<Logo />
-						<GradientText variant='h6' component='div'>
+						<Logo component={Link} to='/' />
+						<GradientText variant='h6' component={Link} to='/'>
 							Natours
 						</GradientText>
 						<ButtonContainer>

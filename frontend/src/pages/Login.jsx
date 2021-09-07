@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Container, Typography, TextField, Button } from '@mui/material';
-
+import { Box, Container, Typography, TextField, Button, InputAdornment, IconButton } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 const Form = styled(Box, { name: 'login-form-container' })(({ theme }) => ({
 	[theme.breakpoints.up('xs')]: {
 		width: '100%',
@@ -77,9 +80,39 @@ const ForgetPasswordButton = styled(Button, { name: 'forget-password-button' })(
 		}
 	}
 }));
+const validationSchema = yup.object({
+	email: yup.string('Enter your email').email('Enter a valid email').required('Email is required'),
+	password: yup
+		.string('Enter your password')
+		.min(8, 'Password should be of minimum 8 characters length')
+		.required('Password is required')
+});
 const Login = () => {
+	useEffect(() => {
+		document.title = 'natour | login';
+	});
+	const [showPassword, toggleShowPassword] = useState(true);
+
+	const handleClickShowPassword = () => {
+		toggleShowPassword((pre) => !pre);
+	};
+
+	const handleMouseDownPassword = (event) => {
+		event.preventDefault();
+	};
+	const formik = useFormik({
+		initialValues: {
+			email: '',
+			password: ''
+		},
+		validationSchema: validationSchema,
+		onSubmit: (values) => {
+			alert(JSON.stringify(values, null, 2));
+		}
+	});
+
 	return (
-		<Container maxWidth='sm' sx={{ backgroundColor: '#f7f7f7', padding: '3.5rem 1rem' }}>
+		<Container maxWidth='sm' sx={{ backgroundColor: '#f7f7f7', padding: '3.5rem 1rem', height: '100vh' }}>
 			<Form>
 				<Title variant='h6' component='h4'>
 					Login
@@ -88,11 +121,44 @@ const Login = () => {
 					size='small'
 					label='email'
 					placeholder='example@test.com'
-					id='email-input'
 					variant='filled'
 					fullWidth
+					id='email'
+					name='email'
+					value={formik.values.email}
+					onChange={formik.handleChange}
+					onBlur={formik.handleBlur}
+					error={formik.touched.email && Boolean(formik.errors.email)}
+					helperText={formik.touched.email && formik.errors.email}
 				/>
-				<RedditTextField size='small' label='password' id='password-input' variant='filled' fullWidth />
+				<RedditTextField
+					size='small'
+					label='password'
+					id='password-input'
+					name='password'
+					value={formik.values.password}
+					onChange={formik.handleChange}
+					onBlur={formik.handleBlur}
+					error={formik.touched.password && Boolean(formik.errors.password)}
+					helperText={formik.touched.password && formik.errors.password}
+					variant='filled'
+					fullWidth
+					type={showPassword ? 'password' : 'text'}
+					InputProps={{
+						disableUnderline: true,
+						endAdornment: (
+							<InputAdornment position='end'>
+								<IconButton
+									aria-label='toggle password visibility'
+									onClick={handleClickShowPassword}
+									onMouseDown={handleMouseDownPassword}
+									edge='end'>
+									{showPassword ? <VisibilityOff /> : <Visibility />}
+								</IconButton>
+							</InputAdornment>
+						)
+					}}
+				/>
 				<Box
 					sx={{
 						width: '100%',
@@ -102,7 +168,9 @@ const Login = () => {
 						alignItems: 'center',
 						justifyContent: 'space-between'
 					}}>
-					<LoginButton>Login</LoginButton>
+					<LoginButton type='submit' onClick={formik.handleSubmit}>
+						Login
+					</LoginButton>
 					<ForgetPasswordButton disableRipple>forget password?</ForgetPasswordButton>
 				</Box>
 			</Form>
