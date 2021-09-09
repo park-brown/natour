@@ -4,16 +4,20 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import AppHeader from './components/AppHeader/AppHeader';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
+import Detail from './pages/Detail/Detail';
 function App() {
 	return (
 		<Router>
 			<AppHeader />
 			<Switch>
-				<Route path='/signup'>
+				<Route exact path='/signup'>
 					<SignUp />
 				</Route>
-				<Route path='/login'>
+				<Route exact path='/login'>
 					<Login />
+				</Route>
+				<Route exact path='/:detail'>
+					<Detail />
 				</Route>
 				<Route path='/'>
 					<Home />

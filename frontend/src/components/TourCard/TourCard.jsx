@@ -5,6 +5,7 @@ import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined
 import RoomOutlinedIcon from '@mui/icons-material/RoomOutlined';
 import FlagOutlinedIcon from '@mui/icons-material/FlagOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import { Link } from 'react-router-dom';
 const CardContainer = styled(Box, { name: 'tour-card' })(({ theme }) => ({
 	width: '100%',
 	maxWidth: '320px',
@@ -68,7 +69,7 @@ const CardDetails = styled(Box, { name: 'tour-card-details' })(({ theme }) => ({
 	display: 'grid',
 	gridTemplateColumns: '1fr 1fr',
 	gap: '1.75rem 2rem',
-	padding: '1rem 2rem',
+	padding: '1.75rem 2rem',
 	backgroundColor: theme.palette.common.white
 }));
 const CardSubHeading = styled(Box, { name: 'tour-card-subheading' })(({ theme }) => ({
@@ -81,8 +82,7 @@ const CardSubHeading = styled(Box, { name: 'tour-card-subheading' })(({ theme })
 const CardText = styled(Box, { name: 'tour-card-text' })(({ theme }) => ({
 	...theme.typography.subtitle1,
 	fontStyle: 'italic',
-	gridColumn: '1 / -1',
-	margin: '-1rem 0 1rem 0'
+	gridColumn: '1 / -1'
 }));
 const CardData = styled(Box, { name: 'tour-card-data' })(({ theme }) => ({
 	display: 'flex',
@@ -179,7 +179,9 @@ const TourCard = () => {
 					<CardText sx={{ margin: 0, fontStyle: 'normal', gridColumn: '2/3' }}>rating(6)</CardText>
 				</Box>
 				<Box sx={{ gridRow: '1/3', justifySelf: 'end', alignSelf: 'center' }}>
-					<DetailButton>Details</DetailButton>
+					<DetailButton component={Link} to='/the-sea-explorer'>
+						Details
+					</DetailButton>
 				</Box>
 			</CardFooter>
 		</CardContainer>
