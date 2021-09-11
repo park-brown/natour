@@ -6,6 +6,10 @@ import RoomOutlinedIcon from '@mui/icons-material/RoomOutlined';
 import Carousel from './Carousel';
 import Description from './Description';
 
+import MapBox from './MapBox';
+import Comment from './Comment';
+import CallToAction from './CallToAction';
+
 const Container = styled(Box, { name: 'detail-page-container' })(({ theme }) => ({
 	width: '100%',
 	overflow: 'hidden'
@@ -73,6 +77,9 @@ const Detail = () => {
 				<Carousel />
 			</Header>
 			<Description />
+			<MapBox />
+			<Comment />
+			<CallToAction />
 		</Container>
 	);
 };

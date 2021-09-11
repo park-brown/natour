@@ -105,7 +105,7 @@ const TourGuideBox = styled(Box, { name: 'tour-guide-box' })(({ theme }) => ({
 	alignItems: 'center',
 	cursor: 'pointer'
 }));
-const TopRightRibbon = styled(Box, { name: 'why-stripe-section-top-right-ribbon' })(({ theme }) => ({
+export const TopRightRibbon = styled(Box, { name: 'why-stripe-section-top-right-ribbon' })(({ theme }) => ({
 	[theme.breakpoints.up('xs')]: {
 		position: 'absolute',
 		zIndex: 2,
@@ -118,7 +118,7 @@ const TopRightRibbon = styled(Box, { name: 'why-stripe-section-top-right-ribbon'
 		transformOrigin: 'top right'
 	}
 }));
-const TopRightRibbonCyan = styled(Box, { name: 'why-stripe-section-top-right-ribbon-top' })(({ theme }) => ({
+export const TopRightRibbonCyan = styled(Box, { name: 'why-stripe-section-top-right-ribbon-top' })(({ theme }) => ({
 	width: '315px',
 	height: '40px',
 	backgroundColor: '#80e9ff',
@@ -126,7 +126,7 @@ const TopRightRibbonCyan = styled(Box, { name: 'why-stripe-section-top-right-rib
 	top: 0,
 	right: 0
 }));
-const BottomLeftRibbon = styled(Box, { name: 'why-stripe-section-bottom-left-ribbon' })(({ theme }) => ({
+export const BottomLeftRibbon = styled(Box, { name: 'why-stripe-section-bottom-left-ribbon' })(({ theme }) => ({
 	[theme.breakpoints.up('xs')]: {
 		position: 'absolute',
 		zIndex: 2,
@@ -139,33 +139,39 @@ const BottomLeftRibbon = styled(Box, { name: 'why-stripe-section-bottom-left-rib
 		transformOrigin: 'bottom left'
 	}
 }));
-const BottomleftRibbonBlue = styled(Box, { name: 'why-stripe-section-bottom-left-ribbon-blue' })(({ theme }) => ({
-	width: '315px',
-	height: '40px',
-	backgroundColor: '#7a73ff',
-	position: 'absolute',
-	bottom: 0,
-	left: 0
-}));
-const BottomLeftRibbonCyan = styled(Box, { name: 'why-stripe-section-bottom-left-ribbon-cyan' })(({ theme }) => ({
-	width: '160px',
-	height: '40px',
-	backgroundColor: '#80e9ff',
-	position: 'absolute',
-	bottom: 0,
-	left: 0,
-	transform: 'translateY(-24px) translateX(157.5px) translate(-50%,0)'
-}));
-const BottomleftRibbonOverlay = styled(Box, { name: 'why-stripe-section-bottom-left-ribbon-overlay' })(({ theme }) => ({
-	width: '160px',
-	height: '16px',
-	backgroundColor: '#0048e5',
-	position: 'absolute',
-	bottom: 0,
-	left: 0,
-	transform: 'translateY(-24px) translateX(157.5px) translate(-50%,0)'
-}));
-const TopRightRibbonBlue = styled(Box, { name: 'why-stripe-section-top-right-ribbon-Bottom' })(({ theme }) => ({
+export const BottomleftRibbonBlue = styled(Box, { name: 'why-stripe-section-bottom-left-ribbon-blue' })(
+	({ theme }) => ({
+		width: '315px',
+		height: '40px',
+		backgroundColor: '#7a73ff',
+		position: 'absolute',
+		bottom: 0,
+		left: 0
+	})
+);
+export const BottomLeftRibbonCyan = styled(Box, { name: 'why-stripe-section-bottom-left-ribbon-cyan' })(
+	({ theme }) => ({
+		width: '160px',
+		height: '40px',
+		backgroundColor: '#80e9ff',
+		position: 'absolute',
+		bottom: 0,
+		left: 0,
+		transform: 'translateY(-24px) translateX(157.5px) translate(-50%,0)'
+	})
+);
+export const BottomleftRibbonOverlay = styled(Box, { name: 'why-stripe-section-bottom-left-ribbon-overlay' })(
+	({ theme }) => ({
+		width: '160px',
+		height: '16px',
+		backgroundColor: '#0048e5',
+		position: 'absolute',
+		bottom: 0,
+		left: 0,
+		transform: 'translateY(-24px) translateX(157.5px) translate(-50%,0)'
+	})
+);
+export const TopRightRibbonBlue = styled(Box, { name: 'why-stripe-section-top-right-ribbon-Bottom' })(({ theme }) => ({
 	width: '160px',
 	height: '40px',
 	backgroundColor: '#7a73ff',
@@ -174,15 +180,17 @@ const TopRightRibbonBlue = styled(Box, { name: 'why-stripe-section-top-right-rib
 	right: 0,
 	transform: 'translateY(24px) translateX(-157.5px) translate(50%,0)'
 }));
-const TopRightRibbonOverlay = styled(Box, { name: 'why-stripe-section-top-right-ribbon-overlay' })(({ theme }) => ({
-	width: '160px',
-	height: '16px',
-	backgroundColor: '#0048e5',
-	position: 'absolute',
-	top: 0,
-	right: 0,
-	transform: 'translateY(24px) translateX(-157.5px) translate(50%,0)'
-}));
+export const TopRightRibbonOverlay = styled(Box, { name: 'why-stripe-section-top-right-ribbon-overlay' })(
+	({ theme }) => ({
+		width: '160px',
+		height: '16px',
+		backgroundColor: '#0048e5',
+		position: 'absolute',
+		top: 0,
+		right: 0,
+		transform: 'translateY(24px) translateX(-157.5px) translate(50%,0)'
+	})
+);
 const Description = () => {
 	return (
 		<Container component='section'>

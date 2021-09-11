@@ -29,7 +29,7 @@ const GradientText = styled(Typography, { name: 'appbar-brand-name' })(({ theme 
 		cursor: 'pointer'
 	}
 }));
-const Logo = styled(Box, { name: 'natour-logo' })(({ theme }) => ({
+export const Logo = styled(Box, { name: 'natour-logo' })(({ theme }) => ({
 	cursor: 'pointer',
 	margin: '0 8px 0 0 ',
 	width: '46.8px',
