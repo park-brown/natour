@@ -11,7 +11,8 @@ export const natoursApi = createApi({
 				headers: {
 					'Content-Type': 'application/json'
 				}
-			})
+			}),
+			transformResponse: (response) => response.data.data
 		})
 	})
 });

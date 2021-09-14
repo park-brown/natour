@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 import TourCard from '../components/TourCard/TourCard';
 import { useGetAllToursQuery } from '../API/natoursApi';
+import TourCardSkeleton from '../components/TourCard/TourCardSkeleton';
 const Container = styled(Box, { name: 'home-section-container' })(({ theme }) => ({
 	backgroundColor: '#f7f7f7',
 	width: '100%'
@@ -55,16 +56,36 @@ const LayOut = styled(Box, { name: 'home-section-layOut' })(({ theme }) => ({
 		gap: '3.75rem 3.75rem'
 	}
 }));
+
 const Home = () => {
-	const { data = [], isLoading, isFetching, isError } = useGetAllToursQuery();
+	const { data = [], isLoading } = useGetAllToursQuery();
+	if (isLoading)
+		return (
+			<Container component='section'>
+				<LayOutContainer>
+					<LayOut>
+						<TourCardSkeleton component='div' />
+						<TourCardSkeleton component='div' />
+						<TourCardSkeleton component='div' />
+						<TourCardSkeleton component='div' />
+						<TourCardSkeleton component='div' />
+						<TourCardSkeleton component='div' />
+						<TourCardSkeleton component='div' />
+						<TourCardSkeleton component='div' />
+						<TourCardSkeleton component='div' />
+						<TourCardSkeleton component='div' />
+					</LayOut>
+				</LayOutContainer>
+			</Container>
+		);
+
 	return (
 		<Container component='section'>
 			<LayOutContainer>
 				<LayOut>
-					<TourCard />
-					{/* <TourCard />
-					<TourCard />
-					<TourCard /> */}
+					{data.map((value) => (
+						<TourCard key={value.id} value={value} />
+					))}
 				</LayOut>
 			</LayOutContainer>
 		</Container>

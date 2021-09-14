@@ -1,12 +1,25 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, Skeleton } from '@mui/material';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import RoomOutlinedIcon from '@mui/icons-material/RoomOutlined';
 import FlagOutlinedIcon from '@mui/icons-material/FlagOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import { Link } from 'react-router-dom';
 const CardContainer = styled(Box, { name: 'tour-card' })(({ theme }) => ({
+	width: '100%',
+	maxWidth: '320px',
+	display: 'flex',
+	flexDirection: 'column',
+	justifyContent: 'flex-start',
+	alignItems: 'center',
+	boxShadow: theme.shadows[4],
+	borderRadius: '0.5rem',
+	position: 'relative',
+	zIndex: 0,
+	overflow: 'hidden'
+}));
+export const CardSkeletonContainer = styled(Skeleton, { name: 'tour-card-skeleton' })(({ theme }) => ({
 	width: '100%',
 	maxWidth: '320px',
 	display: 'flex',
@@ -32,12 +45,12 @@ const CardPicture = styled(Box, { name: 'tour-card-header-pic-container' })(({ t
 
 	zIndex: 1
 }));
-const CardInnerPic = styled('figure', { name: 'tour-card-header-pic' })(({ theme }) => ({
+const CardInnerPic = styled('figure', { name: 'tour-card-header-pic' })(({ theme, src }) => ({
 	margin: 0,
 	width: '100%',
 	height: '100%',
 	objectFit: 'cover',
-	backgroundImage: 'url(./tour-2-cover.jpg)',
+	backgroundImage: `url(https://www.natours.dev/img/tours/${src})`,
 	backgroundPosition: 'center',
 	backgroundRepeat: 'no-repeat',
 	backgroundSize: 'cover'
@@ -55,7 +68,7 @@ const CardInnerPicOverlay = styled(Box, { name: 'tour-card-header-pic-overlay' }
 const CardTitle = styled(Box, { name: 'tour-card-title' })(({ theme }) => ({
 	...theme.typography.h6,
 	width: '100%',
-	height: '2rem',
+	padding: '0.75rem 1.5rem',
 	display: 'flex',
 	alignItems: 'center',
 	justifyContent: 'center',
@@ -87,7 +100,8 @@ const CardText = styled(Box, { name: 'tour-card-text' })(({ theme }) => ({
 const CardData = styled(Box, { name: 'tour-card-data' })(({ theme }) => ({
 	display: 'flex',
 	alignItems: 'center',
-	gap: '8px'
+	gap: '8px',
+	whiteSpace: 'nowrap'
 }));
 const CardFooter = styled(Box, { name: 'tour-card-footer' })(({ theme }) => ({
 	width: '100%',
@@ -115,41 +129,59 @@ export const DetailButton = styled(Button, { name: 'tour-card-detail-button' })(
 		}
 	}
 }));
-const TourCard = () => {
+const TourCard = (props) => {
+	const { value } = props;
+	const {
+		name,
+		summary,
+		ratingsAverage,
+		ratingsQuantity,
+		price,
+		maxGroupSize,
+		locations,
+		imageCover,
+		difficulty,
+		duration,
+		startLocation: { description },
+		startDates
+	} = value;
 	return (
 		<CardContainer>
-			<CardTitle>the sea explorer</CardTitle>
+			<CardTitle>{name}</CardTitle>
 			<CardHeader>
 				<CardPicture>
 					<CardInnerPicOverlay />
-					<CardInnerPic />
+					<CardInnerPic src={imageCover} />
 				</CardPicture>
 			</CardHeader>
 			<CardDetails>
-				<CardSubHeading>medium 7-day tour</CardSubHeading>
-				<CardText>Exploring the jaw-dropping US east coast by foot and by boat</CardText>
+				<CardSubHeading>
+					{difficulty} {duration}-day tour
+				</CardSubHeading>
+				<CardText>{summary}</CardText>
 				<CardData>
 					<RoomOutlinedIcon sx={{ fill: '#55c57a' }} />
 					<Typography variant='subtitle2' component='span'>
-						Miami, USA
+						{description}
 					</Typography>
 				</CardData>
 				<CardData>
 					<CalendarTodayOutlinedIcon sx={{ fill: '#55c57a' }} />
 					<Typography variant='subtitle2' component='span'>
-						June 2021
+						{new Date(startDates[0]).getFullYear()}.{new Date(startDates[0]).getMonth()}.
+						{new Date(startDates[0]).getDate()}
 					</Typography>
 				</CardData>
 				<CardData>
 					<FlagOutlinedIcon sx={{ fill: '#55c57a' }} />
 					<Typography variant='subtitle2' component='span'>
-						4 stops
+						{locations.length} stops
 					</Typography>
 				</CardData>
 				<CardData>
 					<PersonOutlineOutlinedIcon sx={{ fill: '#55c57a' }} />
 					<Typography variant='subtitle2' component='span'>
-						15 people
+						{maxGroupSize} people
 					</Typography>
 				</CardData>
 			</CardDetails>
@@ -163,7 +195,7 @@ const TourCard = () => {
 						gap: '0 8px',
 						gridRow: '1/2'
 					}}>
-					<CardSubHeading sx={{ gridColumn: '1/2', textAlign: 'right' }}>$497</CardSubHeading>
+					<CardSubHeading sx={{ gridColumn: '1/2', textAlign: 'right' }}>${price}</CardSubHeading>
 					<CardText sx={{ margin: 0, fontStyle: 'normal', gridColumn: '2/3' }}>per person</CardText>
 				</Box>
 				<Box
@@ -175,8 +207,8 @@ const TourCard = () => {
 						gap: '0 8px',
 						gridRow: ' 2 / 3'
 					}}>
-					<CardSubHeading sx={{ gridColumn: '1/2', textAlign: 'right' }}>4.8 </CardSubHeading>
-					<CardText sx={{ margin: 0, fontStyle: 'normal', gridColumn: '2/3' }}>rating(6)</CardText>
+					<CardSubHeading sx={{ gridColumn: '1/2', textAlign: 'right' }}>{ratingsAverage}</CardSubHeading>
+					<CardText sx={{ margin: 0, fontStyle: 'normal', gridColumn: '2/3' }}>rating({ratingsQuantity})</CardText>
 				</Box>
 				<Box sx={{ gridRow: '1/3', justifySelf: 'end', alignSelf: 'center' }}>
 					<DetailButton component={Link} to='/the-sea-explorer'>
