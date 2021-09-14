@@ -3,8 +3,10 @@ const rateLimit = require('express-rate-limit');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
+const bookingRouter = require('./routes/bookingRoutes');
 const morgan = require('morgan');
 const helmet = require('helmet');
+const cors = require('cors');
 const compression = require('compression');
 const mongoSanitize = require('express-mongo-sanitize');
 const xssClean = require('xss-clean');
@@ -26,7 +28,8 @@ const limiter = rateLimit({
 });
 // limit request from the same IP
 app.use('/api', limiter);
-
+//allow all the routes to be accessed anywhere on the web
+app.use(cors());
 // body parser, reading data into req.body
 app.use(express.json());
 // after reading data, do data sanitization
@@ -60,6 +63,8 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/tours', tourRouter);
 //review Routes
 app.use('/api/v1/reviews', reviewRouter);
+//booking Routes
+app.use('/api/v1/bookings', bookingRouter);
 app.all('*', (req, res, next) => {
   next(new AppError(`can't find ${req.originalUrl} on this server`, 404));
 });

@@ -2,6 +2,7 @@ import React from 'react';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 import TourCard from '../components/TourCard/TourCard';
+import { useGetAllToursQuery } from '../API/natoursApi';
 const Container = styled(Box, { name: 'home-section-container' })(({ theme }) => ({
 	backgroundColor: '#f7f7f7',
 	width: '100%'
@@ -55,6 +56,7 @@ const LayOut = styled(Box, { name: 'home-section-layOut' })(({ theme }) => ({
 	}
 }));
 const Home = () => {
+	const { data = [], isLoading, isFetching, isError } = useGetAllToursQuery();
 	return (
 		<Container component='section'>
 			<LayOutContainer>

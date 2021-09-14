@@ -5,7 +5,7 @@ dotenv.config({
 });
 
 // connect db
-console.log(process.env.DATABASE);
+
 const DB = process.env.DATABASE.replace(
   '<PASSWORD>',
   process.env.DATABASE__PASSWORD
