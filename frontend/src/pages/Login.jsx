@@ -1,12 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Container, Typography, TextField, Button, InputAdornment, IconButton } from '@mui/material';
+import {
+	Box,
+	Container,
+	Typography,
+	TextField,
+	Button,
+	InputAdornment,
+	IconButton,
+	Snackbar,
+	Alert
+} from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useFormik } from 'formik';
+import { useLoginQuery } from '../API/natoursApi';
+import { setCredentials } from '../Features/AuthSlice';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router';
 import * as yup from 'yup';
 const Form = styled(Box, { name: 'login-form-container' })(({ theme }) => ({
 	[theme.breakpoints.up('xs')]: {
+		position: 'relative',
 		width: '100%',
 		maxWidth: '35rem',
 		backgroundColor: theme.palette.common.white,
@@ -63,6 +78,13 @@ const LoginButton = styled(Button, { name: 'login-button' })(({ theme }) => ({
 			backgroundColor: theme.palette.success.light,
 			transform: 'translateY(-3px)',
 			boxShadow: theme.shadows[1]
+		},
+		'&.Mui-disabled': {
+			backgroundColor: theme.palette.success.light,
+			transform: 'translateY(-3px)',
+			boxShadow: theme.shadows[1],
+			opacity: 0.6,
+			color: theme.palette.common.white
 		}
 	}
 }));
@@ -91,7 +113,11 @@ const Login = () => {
 	useEffect(() => {
 		document.title = 'natour | login';
 	});
+	const dispatch = useDispatch();
+	const history = useHistory();
 	const [showPassword, toggleShowPassword] = useState(true);
+	const [skip, setSkip] = useState(true);
+	const [isDisable, setDisable] = useState(false);
 
 	const handleClickShowPassword = () => {
 		toggleShowPassword((pre) => !pre);
@@ -106,14 +132,46 @@ const Login = () => {
 			password: ''
 		},
 		validationSchema: validationSchema,
-		onSubmit: (values) => {
-			alert(JSON.stringify(values, null, 2));
+		onSubmit: () => {
+			// set login button disable state to true
+			setDisable(true);
+			// trigger query hook
+			setSkip(false);
 		}
 	});
+	let isValid = formik.dirty && formik.isValid;
+	const queryArg = {
+		email: formik.values.email,
+		password: formik.values.password
+	};
+	const { data, isError, isSuccess } = useLoginQuery(queryArg, { skip: skip });
+	if (isError) {
+		formik.errors.email = 'incorrect email or password';
+		formik.errors.password = 'incorrect email or password';
+		setSkip(true);
+		setDisable(false);
+	}
+	if (isSuccess) {
+		const {
+			token,
+			data: { user }
+		} = data;
+		dispatch(setCredentials({ token, user }));
+		setTimeout(() => {
+			history.push('/');
+		}, 1000);
+	}
 
 	return (
 		<Container maxWidth='sm' sx={{ backgroundColor: '#f7f7f7', padding: '3.5rem 1rem', height: '100vh' }}>
 			<Form>
+				{isSuccess && (
+					<Snackbar anchorOrigin={{ horizontal: 'left', vertical: 'top' }} open={isSuccess}>
+						<Alert variant='filled' severity='success' sx={{ boxShadow: 6 }}>
+							Successful log in!
+						</Alert>
+					</Snackbar>
+				)}
 				<Title variant='h6' component='h4'>
 					Login
 				</Title>
@@ -168,7 +226,7 @@ const Login = () => {
 						alignItems: 'center',
 						justifyContent: 'space-between'
 					}}>
-					<LoginButton type='submit' onClick={formik.handleSubmit}>
+					<LoginButton type='submit' onClick={formik.handleSubmit} disabled={!isValid || isDisable}>
 						Login
 					</LoginButton>
 					<ForgetPasswordButton disableRipple>forget password?</ForgetPasswordButton>

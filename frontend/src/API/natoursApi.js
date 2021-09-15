@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+
 // Define a service using a base URL and expected endpoints
 export const natoursApi = createApi({
 	reducerPath: 'natoursApi',
@@ -20,8 +21,18 @@ export const natoursApi = createApi({
 				url: `tours/${id}/reviews`
 			}),
 			transformResponse: (response) => response.data.data
+		}),
+		login: builder.query({
+			query: ({ email, password }) => ({
+				url: 'users/login',
+				method: 'POST',
+				body: {
+					email,
+					password
+				}
+			})
 		})
 	})
 });
 
-export const { useGetAllToursQuery, useGetAllReviewFromATourQuery } = natoursApi;
+export const { useGetAllToursQuery, useGetAllReviewFromATourQuery, useLoginQuery } = natoursApi;
