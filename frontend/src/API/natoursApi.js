@@ -18,7 +18,8 @@ export const natoursApi = createApi({
 		getAllReviewFromATour: builder.query({
 			query: (id) => ({
 				url: `tours/${id}/reviews`
-			})
+			}),
+			transformResponse: (response) => response.data.data
 		})
 	})
 });

@@ -65,9 +65,11 @@ const Detail = () => {
 	const { data } = useGetAllToursQuery(undefined, {
 		selectFromResult: ({ data }) => ({ data: data?.find((tour) => tour.name === detail) })
 	});
+
 	if (data === undefined) return <LinearProgress />;
 
 	const {
+		_id,
 		name,
 		duration,
 		startLocation,
@@ -81,6 +83,7 @@ const Detail = () => {
 		guides,
 		locations
 	} = data;
+
 	return (
 		<Container component='main'>
 			<HeaderCopy>
@@ -111,8 +114,8 @@ const Detail = () => {
 				name={name}
 			/>
 			<MapBox locations={locations} />
-			<Comment />
-			<CallToAction />
+			<Comment id={_id} />
+			<CallToAction duration={duration} />
 		</Container>
 	);
 };

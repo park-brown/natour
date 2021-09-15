@@ -1,5 +1,6 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
+import { useGetAllReviewFromATourQuery } from '../../API/natoursApi';
 import { Box, Typography, Tabs, Tab, Avatar, Rating } from '@mui/material';
 import {
 	TopRightRibbon,
@@ -87,58 +88,60 @@ const CustomTab = styled(Tab, { name: 'custom-tab' })(({ theme }) => ({
 		margin: theme.spacing(0, 2.5)
 	}
 }));
+
 const CardInner = (props) => {
+	const { rating, review, user } = props;
 	return (
 		<CommentCard>
 			<CommentCardHeader>
-				<Avatar src='/comments/user-3.jpg' sx={{ width: '45px', height: '45px' }} />
-				<Typography variant='body2'>Lourdes Browning</Typography>
+				<Avatar src={`https://www.natours.dev/img/users/${user.photo}`} sx={{ width: '45px', height: '45px' }} />
+				<Typography variant='body2'>{user.name}</Typography>
 			</CommentCardHeader>
-			<CommentCardBody variant='body2'>
-				Cras mollis nisi parturient mi nec aliquet suspendisse sagittis eros condimentum scelerisque taciti mattis
-			</CommentCardBody>
-			<Rating name='read-only' value={4.5} readOnly precision={0.5} />
+			<CommentCardBody variant='body2'>{review}</CommentCardBody>
+			<Rating name='read-only' value={rating} readOnly precision={0.5} />
 		</CommentCard>
 	);
 };
 
-const Comment = () => {
+const Comment = ({ id }) => {
 	const [value, setValue] = React.useState(0);
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
+	const { data = {}, isLoading } = useGetAllReviewFromATourQuery(id);
 
 	return (
-		<CommentSection component='section'>
-			<TopRightRibbon>
-				<TopRightRibbonCyan />
-				<TopRightRibbonBlue />
-				<TopRightRibbonOverlay />
-			</TopRightRibbon>
-			<BottomLeftRibbon>
-				<BottomleftRibbonBlue />
-				<BottomLeftRibbonCyan />
-				<BottomleftRibbonOverlay />
-			</BottomLeftRibbon>
-			<CommentBackground />
-			<LayOutContainer>
-				<Tabs
-					value={value}
-					onChange={handleChange}
-					variant='scrollable'
-					// scrollButtons
-					// allowScrollButtonsMobile
-					aria-label='review-box'>
-					<CustomTab disableRipple label={<CardInner />} />
-					<CustomTab disableRipple label={<CardInner />} />
-					<CustomTab disableRipple label={<CardInner />} />
-					<CustomTab disableRipple label={<CardInner />} />
-					<CustomTab disableRipple label={<CardInner />} />
-					<CustomTab disableRipple label={<CardInner />} />
-				</Tabs>
-			</LayOutContainer>
-		</CommentSection>
+		<React.Fragment>
+			{isLoading ? null : (
+				<CommentSection component='section'>
+					<TopRightRibbon>
+						<TopRightRibbonCyan />
+						<TopRightRibbonBlue />
+						<TopRightRibbonOverlay />
+					</TopRightRibbon>
+					<BottomLeftRibbon>
+						<BottomleftRibbonBlue />
+						<BottomLeftRibbonCyan />
+						<BottomleftRibbonOverlay />
+					</BottomLeftRibbon>
+					<CommentBackground />
+					<LayOutContainer>
+						<Tabs
+							value={value}
+							onChange={handleChange}
+							variant='scrollable'
+							// scrollButtons
+							// allowScrollButtonsMobile
+							aria-label='review-box'>
+							{data.map(({ _id, rating, review, user }) => (
+								<CustomTab disableRipple label={<CardInner rating={rating} review={review} user={user} />} key={_id} />
+							))}
+						</Tabs>
+					</LayOutContainer>
+				</CommentSection>
+			)}
+		</React.Fragment>
 	);
 };
 

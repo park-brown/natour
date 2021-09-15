@@ -76,7 +76,7 @@ const BookButton = styled(Button, { name: 'detail-page-book-button' })(({ theme 
 		}
 	}
 }));
-const CallToAction = () => {
+const CallToAction = ({ duration }) => {
 	return (
 		<SectionContainer component='section'>
 			<LayOutContainer>
@@ -102,7 +102,7 @@ const CallToAction = () => {
 								what are you waiting for ?
 							</GradientText>
 							<Typography variant='body1' color='grey.500'>
-								7 days. 1 adventure. <br />
+								{duration} days. 1 adventure. <br />
 								Infinite memories.
 								<br /> Make it yours today!
 							</Typography>
