@@ -191,7 +191,9 @@ export const TopRightRibbonOverlay = styled(Box, { name: 'why-stripe-section-top
 		transform: 'translateY(24px) translateX(-157.5px) translate(50%,0)'
 	})
 );
-const Description = () => {
+const Description = (props) => {
+	const { startDates, ratingsAverage, difficulty, maxGroupSize, description, guides, name } = props;
+
 	return (
 		<Container component='section'>
 			<TopRightRibbon>
@@ -215,14 +217,14 @@ const Description = () => {
 							<CalendarTodayOutlinedIcon sx={{ fill: '#55c57a', width: '20px', height: '20px' }} />
 							<Typography variant='body2'>next date</Typography>
 							<Typography variant='body2' color='grey.600'>
-								June 2021
+								{new Date(startDates[0]).getMonth()} - {new Date(startDates[0]).getFullYear()}
 							</Typography>
 						</OverviewBoxListItem>
 						<OverviewBoxListItem>
 							<MovingOutlinedIcon sx={{ fill: '#55c57a', width: '20px', height: '20px' }} />
 							<Typography variant='body2'>Difficulty</Typography>
 							<Typography variant='body2' color='grey.600'>
-								Medium
+								{difficulty}
 							</Typography>
 						</OverviewBoxListItem>
 						<OverviewBoxListItem>
@@ -230,7 +232,7 @@ const Description = () => {
 
 							<Typography variant='body2'>participants</Typography>
 							<Typography variant='body2' color='grey.600'>
-								15 people
+								{maxGroupSize} people
 							</Typography>
 						</OverviewBoxListItem>
 						<OverviewBoxListItem>
@@ -238,42 +240,43 @@ const Description = () => {
 
 							<Typography variant='body2'>Rating</Typography>
 							<Typography variant='body2' color='grey.600'>
-								4.8/5
+								{ratingsAverage}/5
 							</Typography>
 						</OverviewBoxListItem>
 						<CopyTitle variant='h6' sx={{ mb: '1rem' }}>
 							Your tour guides
 						</CopyTitle>
-						<TourGuideBox>
+						{/* <TourGuideBox>
 							<Avatar src='./user-6.jpg' alt='' sx={{ width: '35px', height: '35px' }} />
 
 							<Typography variant='body2'>Lead guide</Typography>
 							<Typography variant='body2' color='grey.600'>
 								Miyah Myles
 							</Typography>
-						</TourGuideBox>
-						<TourGuideBox>
-							<Avatar src='./user-12.jpg' alt='' sx={{ width: '35px', height: '35px' }} />
-							<Typography variant='body2'>Tour guide</Typography>
-							<Typography variant='body2' color='grey.600'>
-								Jennifer Hardy
-							</Typography>
-						</TourGuideBox>
+						</TourGuideBox> */}
+						{guides.map((guide) => (
+							<TourGuideBox key={guide.name}>
+								<Avatar
+									src={`https://www.natours.dev/img/users/${guide.photo}`}
+									alt={guide.name}
+									sx={{ width: '35px', height: '35px' }}
+								/>
+								<Typography variant='body2'>{guide.role}</Typography>
+								<Typography variant='body2' color='grey.600'>
+									{guide.name}
+								</Typography>
+							</TourGuideBox>
+						))}
 					</OverViewBox>
 					<DescriptionBox>
 						<CopyTitle variant='h6' sx={{ mb: '1rem', alignSelf: 'flex-start' }}>
-							about the sea explore tour
+							about {name}
 						</CopyTitle>
 						<Typography variant='body2' color='grey.600' sx={{ mb: '1rem' }}>
-							Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Excepteur
-							sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+							{description.split('\n')[0]}
 						</Typography>
 						<Typography variant='body2' color='grey.600'>
-							Irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
-							sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem
-							ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
-							magna aliqua. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-							pariatur.
+							{description.split('\n')[1]}
 						</Typography>
 					</DescriptionBox>
 				</LayOut>

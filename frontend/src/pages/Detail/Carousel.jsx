@@ -7,24 +7,6 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
-const images = [
-	{
-		label: 'tour-cover',
-		imgPath: './tour-2-cover.jpg'
-	},
-	{
-		label: 'beach view',
-		imgPath: './tour-2-1.jpg'
-	},
-	{
-		label: 'turtle',
-		imgPath: './tour-2-2.jpg'
-	},
-	{
-		label: 'palm tree',
-		imgPath: './tour-2-3.jpg'
-	}
-];
 
 const HeaderImage = styled(Box, { name: 'header-image' })(({ theme }) => ({
 	[theme.breakpoints.up('xs')]: {
@@ -53,8 +35,10 @@ const HeaderImage = styled(Box, { name: 'header-image' })(({ theme }) => ({
 		margin: '0 auto'
 	}
 }));
-const Carousel = () => {
+const Carousel = (props) => {
 	const theme = useTheme();
+	const { images, name } = props;
+
 	const [activeStep, setActiveStep] = React.useState(0);
 	const maxSteps = images.length;
 
@@ -78,8 +62,8 @@ const Carousel = () => {
 				onChangeIndex={handleStepChange}
 				enableMouseEvents>
 				{images.map((step, index) => (
-					<div key={step.label}>
-						<HeaderImage component='img' src={step.imgPath} alt={step.label} />
+					<div key={step}>
+						<HeaderImage component='img' src={`https://www.natours.dev/img/tours/${step}`} alt={`${name - index}}`} />
 					</div>
 				))}
 			</AutoPlaySwipeableViews>

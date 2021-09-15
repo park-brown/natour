@@ -12,9 +12,15 @@ export const natoursApi = createApi({
 					'Content-Type': 'application/json'
 				}
 			}),
+			providesTags: ['Tour'],
 			transformResponse: (response) => response.data.data
+		}),
+		getAllReviewFromATour: builder.query({
+			query: (id) => ({
+				url: `tours/${id}/reviews`
+			})
 		})
 	})
 });
 
-export const { useGetAllToursQuery } = natoursApi;
+export const { useGetAllToursQuery, useGetAllReviewFromATourQuery } = natoursApi;

@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box, Typography } from '@mui/material';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import RoomOutlinedIcon from '@mui/icons-material/RoomOutlined';
 import Carousel from './Carousel';
 import Description from './Description';
-
 import MapBox from './MapBox';
 import Comment from './Comment';
 import CallToAction from './CallToAction';
-
+import { useGetAllToursQuery, useGetAllReviewFromATourQuery } from '../../API/natoursApi';
+import { useParams } from 'react-router';
 const Container = styled(Box, { name: 'detail-page-container' })(({ theme }) => ({
 	width: '100%',
 	overflow: 'hidden'
@@ -40,7 +40,8 @@ const HeaderCopy = styled(Box, { name: 'detail-page-header-copy-container' })(({
 }));
 const CopyTitle = styled(Typography, { name: 'header-title' })(({ theme }) => ({
 	color: theme.palette.common.black,
-	cursor: 'pointer'
+	cursor: 'pointer',
+	whiteSpace: 'nowrap'
 }));
 const CopySubTitle = styled(Box, { name: 'detail-page-copy-subtitle' })(({ theme }) => ({
 	[theme.breakpoints.up('xs')]: {
@@ -48,7 +49,8 @@ const CopySubTitle = styled(Box, { name: 'detail-page-copy-subtitle' })(({ theme
 		maxWidth: '18.75rem',
 		display: 'flex',
 		alignItems: 'center',
-		justifyContent: 'space-between'
+		justifyContent: 'space-between',
+		gap: '12px'
 	},
 	[theme.breakpoints.up('sm')]: {
 		width: '58.33333%'
@@ -56,28 +58,63 @@ const CopySubTitle = styled(Box, { name: 'detail-page-copy-subtitle' })(({ theme
 }));
 
 const Detail = () => {
+	const { detail } = useParams();
+	useEffect(() => {
+		document.title = `natour | ${detail}`;
+	});
+	const {
+		data: {
+			_id,
+			name,
+
+			description,
+			difficulty,
+			duration,
+			guides,
+			imageCover,
+			images,
+			locations,
+			maxGroupSize,
+
+			ratingsAverage,
+
+			startDates,
+			startLocation
+		}
+	} = useGetAllToursQuery(undefined, {
+		selectFromResult: ({ data }) => ({ data: data?.find((tour) => tour.name === detail) })
+	});
+
 	return (
 		<Container component='main'>
 			<HeaderCopy>
 				<CopyTitle component='h4' variant='h6'>
-					the sea explorer
+					{name}
 				</CopyTitle>
 				<CopySubTitle>
 					<Box sx={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
 						<AccessTimeOutlinedIcon sx={{ fill: '#55c57a' }} />
-						<CopyTitle variant='body1'>7 days</CopyTitle>
+						<CopyTitle variant='body1'>{duration} days</CopyTitle>
 					</Box>
 					<Box sx={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
 						<RoomOutlinedIcon sx={{ fill: '#55c57a' }} />
-						<CopyTitle variant='body1'>Miami, USA</CopyTitle>
+						<CopyTitle variant='body1'>{startLocation.description}</CopyTitle>
 					</Box>
 				</CopySubTitle>
 			</HeaderCopy>
 			<Header component='section'>
-				<Carousel />
+				<Carousel images={[imageCover, ...images]} name={name} />
 			</Header>
-			<Description />
-			<MapBox />
+			<Description
+				startDates={startDates}
+				ratingsAverage={ratingsAverage}
+				difficulty={difficulty}
+				maxGroupSize={maxGroupSize}
+				description={description}
+				guides={guides}
+				name={name}
+			/>
+			<MapBox locations={locations} />
 			<Comment />
 			<CallToAction />
 		</Container>
