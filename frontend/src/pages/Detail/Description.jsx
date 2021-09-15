@@ -217,7 +217,7 @@ const Description = (props) => {
 							<CalendarTodayOutlinedIcon sx={{ fill: '#55c57a', width: '20px', height: '20px' }} />
 							<Typography variant='body2'>next date</Typography>
 							<Typography variant='body2' color='grey.600'>
-								{new Date(startDates[0]).getMonth()} - {new Date(startDates[0]).getFullYear()}
+								{new Date(startDates[0]).getMonth() + 1} - {new Date(startDates[0]).getFullYear()}
 							</Typography>
 						</OverviewBoxListItem>
 						<OverviewBoxListItem>
@@ -246,14 +246,7 @@ const Description = (props) => {
 						<CopyTitle variant='h6' sx={{ mb: '1rem' }}>
 							Your tour guides
 						</CopyTitle>
-						{/* <TourGuideBox>
-							<Avatar src='./user-6.jpg' alt='' sx={{ width: '35px', height: '35px' }} />
 
-							<Typography variant='body2'>Lead guide</Typography>
-							<Typography variant='body2' color='grey.600'>
-								Miyah Myles
-							</Typography>
-						</TourGuideBox> */}
 						{guides.map((guide) => (
 							<TourGuideBox key={guide.name}>
 								<Avatar

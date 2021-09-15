@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { styled } from '@mui/material/styles';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, LinearProgress } from '@mui/material';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import RoomOutlinedIcon from '@mui/icons-material/RoomOutlined';
 import Carousel from './Carousel';
@@ -8,7 +8,7 @@ import Description from './Description';
 import MapBox from './MapBox';
 import Comment from './Comment';
 import CallToAction from './CallToAction';
-import { useGetAllToursQuery, useGetAllReviewFromATourQuery } from '../../API/natoursApi';
+import { useGetAllToursQuery } from '../../API/natoursApi';
 import { useParams } from 'react-router';
 const Container = styled(Box, { name: 'detail-page-container' })(({ theme }) => ({
 	width: '100%',
@@ -62,29 +62,25 @@ const Detail = () => {
 	useEffect(() => {
 		document.title = `natour | ${detail}`;
 	});
-	const {
-		data: {
-			_id,
-			name,
-
-			description,
-			difficulty,
-			duration,
-			guides,
-			imageCover,
-			images,
-			locations,
-			maxGroupSize,
-
-			ratingsAverage,
-
-			startDates,
-			startLocation
-		}
-	} = useGetAllToursQuery(undefined, {
+	const { data } = useGetAllToursQuery(undefined, {
 		selectFromResult: ({ data }) => ({ data: data?.find((tour) => tour.name === detail) })
 	});
+	if (data === undefined) return <LinearProgress />;
 
+	const {
+		name,
+		duration,
+		startLocation,
+		imageCover,
+		images,
+		startDates,
+		ratingsAverage,
+		difficulty,
+		maxGroupSize,
+		description,
+		guides,
+		locations
+	} = data;
 	return (
 		<Container component='main'>
 			<HeaderCopy>
