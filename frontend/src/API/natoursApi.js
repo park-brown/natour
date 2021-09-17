@@ -31,8 +31,20 @@ export const natoursApi = createApi({
 					password
 				}
 			})
+		}),
+		signUp: builder.mutation({
+			query: ({ name, email, password, passwordConfirm }) => ({
+				url: 'users/signup',
+				method: 'POST',
+				body: {
+					name,
+					email,
+					password,
+					passwordConfirm
+				}
+			})
 		})
 	})
 });
 
-export const { useGetAllToursQuery, useGetAllReviewFromATourQuery, useLoginQuery } = natoursApi;
+export const { useGetAllToursQuery, useGetAllReviewFromATourQuery, useLoginQuery, useSignUpMutation } = natoursApi;

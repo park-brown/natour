@@ -166,9 +166,16 @@ const Login = () => {
 		<Container maxWidth='sm' sx={{ backgroundColor: '#f7f7f7', padding: '3.5rem 1rem', height: '100vh' }}>
 			<Form>
 				{isSuccess && (
-					<Snackbar anchorOrigin={{ horizontal: 'left', vertical: 'top' }} open={isSuccess}>
+					<Snackbar anchorOrigin={{ horizontal: 'center', vertical: 'top' }} open={isSuccess} autoHideDuration={600}>
 						<Alert variant='filled' severity='success' sx={{ boxShadow: 6 }}>
-							Successful log in!
+							Successfully log in!
+						</Alert>
+					</Snackbar>
+				)}
+				{isError && (
+					<Snackbar anchorOrigin={{ horizontal: 'center', vertical: 'top' }} open={isError} autoHideDuration={600}>
+						<Alert variant='filled' severity='error' sx={{ boxShadow: 6 }}>
+							log in failed, please try again!
 						</Alert>
 					</Snackbar>
 				)}

@@ -1,10 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Container, Typography, TextField, Button, InputAdornment, IconButton } from '@mui/material';
+import {
+	Box,
+	Container,
+	Typography,
+	TextField,
+	Button,
+	InputAdornment,
+	IconButton,
+	Snackbar,
+	Alert
+} from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { useSignUpMutation } from '../API/natoursApi';
+import { setCredentials } from '../Features/AuthSlice';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router';
 const Form = styled(Box, { name: 'login-form-container' })(({ theme }) => ({
 	[theme.breakpoints.up('xs')]: {
 		width: '100%',
@@ -63,6 +77,13 @@ const LoginButton = styled(Button, { name: 'login-button' })(({ theme }) => ({
 			backgroundColor: theme.palette.success.light,
 			transform: 'translateY(-3px)',
 			boxShadow: theme.shadows[1]
+		},
+		'&.Mui-disabled': {
+			backgroundColor: theme.palette.success.light,
+			transform: 'translateY(-3px)',
+			boxShadow: theme.shadows[1],
+			opacity: 0.6,
+			color: theme.palette.common.white
 		}
 	}
 }));
@@ -77,7 +98,7 @@ const validationSchema = yup.object({
 		.string('Enter your password')
 		.min(8, 'Password should be of minimum 8 characters length')
 		.required('Password is required'),
-	confirmPassword: yup
+	passwordConfirm: yup
 		.string('Enter your confirm password')
 		.min(8, 'Password should be of minimum 8 characters length')
 		.required('Confirm Password is required')
@@ -87,6 +108,8 @@ const SignUp = () => {
 	useEffect(() => {
 		document.title = 'natour | signup';
 	});
+	const dispatch = useDispatch();
+	const history = useHistory();
 	const [showPassword, toggleShowPassword] = useState(true);
 
 	const handleClickShowPassword = () => {
@@ -101,26 +124,55 @@ const SignUp = () => {
 			name: '',
 			email: '',
 			password: '',
-			confirmPassword: ''
+			passwordConfirm: ''
 		},
 
 		validationSchema: validationSchema,
 
-		onSubmit: (values) => {
-			alert(JSON.stringify(values, null, 2));
+		onSubmit: ({ name, email, password, passwordConfirm }) => {
+			signUp({
+				name,
+				email,
+				password,
+				passwordConfirm
+			});
 		},
 		validate: () => {
-			if (formik.values.password !== formik.values.confirmPassword) {
+			if (formik.values.password !== formik.values.passwordConfirm) {
 				return {
-					confirmPassword: 'confirm password and password are not the same'
+					passwordConfirm: 'confirm password and password are not the same'
 				};
 			} else return;
 		}
 	});
-
+	let isValid = formik.dirty && formik.isValid;
+	const [signUp, { data, isSuccess, isError, isLoading }] = useSignUpMutation();
+	if (isSuccess) {
+		const {
+			token,
+			data: { user }
+		} = data;
+		dispatch(setCredentials({ token, user }));
+		setTimeout(() => history.push('/'), 1000);
+	}
 	return (
 		<Container maxWidth='sm' sx={{ backgroundColor: '#f7f7f7', padding: '3.5rem 1rem', height: '100vh' }}>
 			<Form>
+				{isSuccess && (
+					<Snackbar anchorOrigin={{ horizontal: 'center', vertical: 'top' }} open={isSuccess} autoHideDuration={600}>
+						<Alert variant='filled' severity='success' sx={{ boxShadow: 6 }}>
+							Successfully sign up!
+						</Alert>
+					</Snackbar>
+				)}
+				{isError && (
+					<Snackbar anchorOrigin={{ horizontal: 'center', vertical: 'top' }} open={isError} autoHideDuration={600}>
+						<Alert variant='filled' severity='error' sx={{ boxShadow: 6 }}>
+							sign up failed. please try again.
+						</Alert>
+					</Snackbar>
+				)}
+
 				<Title variant='h6' component='h4'>
 					Sign Up
 				</Title>
@@ -183,13 +235,13 @@ const SignUp = () => {
 				<RedditTextField
 					size='small'
 					label='comfirm password'
-					id='Confirmpassword-input'
-					name='confirmPassword'
-					value={formik.values.confirmPassword}
+					id='passwordConfirm-input'
+					name='passwordConfirm'
+					value={formik.values.passwordConfirm}
 					onChange={formik.handleChange}
 					onBlur={formik.handleBlur}
-					error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
-					helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+					error={formik.touched.passwordConfirm && Boolean(formik.errors.passwordConfirm)}
+					helperText={formik.touched.passwordConfirm && formik.errors.passwordConfirm}
 					variant='filled'
 					fullWidth
 					type={showPassword ? 'password' : 'text'}
@@ -209,7 +261,9 @@ const SignUp = () => {
 					}}
 				/>
 
-				<LoginButton onClick={formik.handleSubmit}>Sign up</LoginButton>
+				<LoginButton onClick={formik.handleSubmit} disabled={!isValid || isLoading}>
+					Sign up
+				</LoginButton>
 			</Form>
 		</Container>
 	);
