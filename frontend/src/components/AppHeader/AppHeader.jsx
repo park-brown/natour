@@ -2,6 +2,8 @@ import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import { AppBar, Box, Toolbar, Typography, CssBaseline, useScrollTrigger, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import UserDropDown from './UserDropDown';
 function ElevationScroll(props) {
 	const { children, window } = props;
 	// Note that you normally won't need to set the window ref as useScrollTrigger
@@ -62,6 +64,8 @@ const HeaderButton = styled(Button, { name: 'headr-button' })(({ theme }) => ({
 	}
 }));
 const AppHeader = (props) => {
+	const { user } = useSelector((state) => state.auth);
+
 	return (
 		<React.Fragment>
 			<CssBaseline />
@@ -72,14 +76,18 @@ const AppHeader = (props) => {
 						<GradientText variant='h6' component={Link} to='/'>
 							Natours
 						</GradientText>
-						<ButtonContainer>
-							<HeaderButton component={Link} variant='outlined' to='/login'>
-								log in
-							</HeaderButton>
-							<HeaderButton component={Link} variant='outlined' to='/signup'>
-								sign up
-							</HeaderButton>
-						</ButtonContainer>
+						{user ? (
+							<UserDropDown user={user} />
+						) : (
+							<ButtonContainer>
+								<HeaderButton component={Link} variant='outlined' to='/login'>
+									log in
+								</HeaderButton>
+								<HeaderButton component={Link} variant='outlined' to='/signup'>
+									sign up
+								</HeaderButton>
+							</ButtonContainer>
+						)}
 					</Toolbar>
 				</AppBar>
 			</ElevationScroll>
