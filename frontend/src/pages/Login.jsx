@@ -156,8 +156,9 @@ const Login = () => {
 			token,
 			data: { user }
 		} = data;
-		dispatch(setCredentials({ token, user }));
+		// had to pass dispatch into setTimeout, otherwise throw error 'https://github.com/facebook/react/issues/18178#issuecomment-595846312'
 		setTimeout(() => {
+			dispatch(setCredentials({ token, user }));
 			history.push('/');
 		}, 1000);
 	}

@@ -28,8 +28,10 @@ const limiter = rateLimit({
 });
 // limit request from the same IP
 app.use('/api', limiter);
+
 //allow all the routes to be accessed anywhere on the web
 app.use(cors());
+
 // body parser, reading data into req.body
 app.use(express.json());
 // after reading data, do data sanitization

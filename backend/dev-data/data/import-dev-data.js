@@ -27,6 +27,7 @@ const reviews = JSON.parse(
 );
 
 // IMPORT DATA INTO DB
+//command: node ./backend/dev-data/data/import-dev-data.js  --import
 const importData = async () => {
   try {
     await Tour.create(tours);
@@ -40,7 +41,7 @@ const importData = async () => {
 };
 
 // DELETE ALL DATA FROM DB
-//command node ./backend/dev-data/data/import-dev-data.js  --delete
+//command: node ./backend/dev-data/data/import-dev-data.js  --delete
 const deleteData = async () => {
   try {
     await Tour.deleteMany();

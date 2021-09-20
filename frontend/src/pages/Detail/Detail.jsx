@@ -63,7 +63,7 @@ const Detail = () => {
 		document.title = `natour | ${detail}`;
 	});
 	const { data } = useGetAllToursQuery(undefined, {
-		selectFromResult: ({ data }) => ({ data: data?.find((tour) => tour.name === detail) })
+		selectFromResult: ({ data }) => ({ data: data?.find((tour) => tour.slug === detail) })
 	});
 
 	if (data === undefined) return <LinearProgress />;
@@ -115,7 +115,7 @@ const Detail = () => {
 			/>
 			<MapBox locations={locations} />
 			<Comment id={_id} />
-			<CallToAction duration={duration} />
+			<CallToAction duration={duration} tourId={_id} />
 		</Container>
 	);
 };

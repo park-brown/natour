@@ -1,7 +1,10 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
-import { Box, Typography, Avatar, AvatarGroup, Button } from '@mui/material';
+import { Box, Typography, Avatar, AvatarGroup, Button, Snackbar, Alert } from '@mui/material';
 import { Logo } from '../../components/AppHeader/AppHeader';
+import { useBookTourMutation } from '../../API/natoursApi';
+import { loadStripe } from '@stripe/stripe-js';
+import { useSelector } from 'react-redux';
 const SectionContainer = styled(Box, { name: 'call-to-action-section' })(({ theme }) => ({
 	width: '100%',
 	position: 'relative',
@@ -73,12 +76,51 @@ const BookButton = styled(Button, { name: 'detail-page-book-button' })(({ theme 
 			backgroundColor: theme.palette.success.light,
 			transform: 'translateY(-3px)',
 			boxShadow: theme.shadows[1]
+		},
+		'&.Mui-disabled': {
+			opacity: 0.6,
+			color: theme.palette.common.white
 		}
 	}
 }));
-const CallToAction = ({ duration }) => {
+const CallToAction = ({ duration, tourId }) => {
+	const { token } = useSelector((state) => state.auth);
+	const queryArg = {
+		id: tourId,
+		token: token
+	};
+	const [bookTour, { data, isLoading, isSuccess, isError }] = useBookTourMutation();
+	const handleBookTour = () => {
+		bookTour(queryArg);
+	};
+	const redirectToCheckOut = async (id) => {
+		const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLICKEY);
+		stripe.redirectToCheckout({ sessionId: id });
+	};
+
+	if (isSuccess) {
+		const {
+			session: { id }
+		} = data;
+
+		redirectToCheckOut(id);
+	}
 	return (
 		<SectionContainer component='section'>
+			{isSuccess && (
+				<Snackbar anchorOrigin={{ horizontal: 'center', vertical: 'top' }} open={isSuccess}>
+					<Alert variant='filled' severity='success' sx={{ boxShadow: 6 }}>
+						redirct to check out...
+					</Alert>
+				</Snackbar>
+			)}
+			{isError && (
+				<Snackbar anchorOrigin={{ horizontal: 'center', vertical: 'top' }} open={isError}>
+					<Alert variant='filled' severity='error' sx={{ boxShadow: 6 }}>
+						please login before booking tour.
+					</Alert>
+				</Snackbar>
+			)}
 			<LayOutContainer>
 				<LayOut>
 					<CtaCard>
@@ -107,7 +149,9 @@ const CallToAction = ({ duration }) => {
 								<br /> Make it yours today!
 							</Typography>
 						</Box>
-						<BookButton>Book Tour</BookButton>
+						<BookButton onClick={handleBookTour} disabled={isLoading}>
+							{isLoading ? 'processing' : 'book Tour'}
+						</BookButton>
 					</CtaCard>
 				</LayOut>
 			</LayOutContainer>

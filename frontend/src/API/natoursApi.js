@@ -43,8 +43,22 @@ export const natoursApi = createApi({
 					passwordConfirm
 				}
 			})
+		}),
+		bookTour: builder.mutation({
+			query: ({ id, token }) => ({
+				url: `bookings/checkout-session/${id}`,
+				headers: {
+					authorization: `Bearer ${token}`
+				}
+			})
 		})
 	})
 });
 
-export const { useGetAllToursQuery, useGetAllReviewFromATourQuery, useLoginQuery, useSignUpMutation } = natoursApi;
+export const {
+	useGetAllToursQuery,
+	useGetAllReviewFromATourQuery,
+	useLoginQuery,
+	useSignUpMutation,
+	useBookTourMutation
+} = natoursApi;

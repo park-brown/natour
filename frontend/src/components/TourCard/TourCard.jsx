@@ -143,7 +143,8 @@ const TourCard = (props) => {
 		difficulty,
 		duration,
 		startLocation: { description },
-		startDates
+		startDates,
+		slug
 	} = value;
 	return (
 		<CardContainer>
@@ -211,7 +212,7 @@ const TourCard = (props) => {
 					<CardText sx={{ margin: 0, fontStyle: 'normal', gridColumn: '2/3' }}>rating({ratingsQuantity})</CardText>
 				</Box>
 				<Box sx={{ gridRow: '1/3', justifySelf: 'end', alignSelf: 'center' }}>
-					<DetailButton component={Link} to={`/${name}`}>
+					<DetailButton component={Link} to={`/${slug}`}>
 						Details
 					</DetailButton>
 				</Box>
