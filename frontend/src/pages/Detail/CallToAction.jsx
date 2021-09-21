@@ -83,7 +83,7 @@ const BookButton = styled(Button, { name: 'detail-page-book-button' })(({ theme 
 		}
 	}
 }));
-const CallToAction = ({ duration, tourId }) => {
+const CallToAction = ({ duration, tourId, images }) => {
 	const { token } = useSelector((state) => state.auth);
 	const queryArg = {
 		id: tourId,
@@ -128,8 +128,8 @@ const CallToAction = ({ duration, tourId }) => {
 							<Avatar alt='logo' sx={{ backgroundColor: 'transparent' }}>
 								<Logo sx={{ width: '39px', height: '20px', margin: 0 }} />
 							</Avatar>
-							<Avatar alt='tour-image-1' src='/tour-2-2.jpg' />
-							<Avatar alt='tour-image-2' src='/tour-2-3.jpg' />
+							<Avatar alt='tour-image-1' src={`https://www.natours.dev/img/tours/${images[0]}`} />
+							<Avatar alt='tour-image-2' src={`https://www.natours.dev/img/tours/${images[1]}`} />
 						</AvatarGroup>
 						<Box
 							sx={{

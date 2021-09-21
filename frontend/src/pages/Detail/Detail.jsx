@@ -115,7 +115,7 @@ const Detail = () => {
 			/>
 			<MapBox locations={locations} />
 			<Comment id={_id} />
-			<CallToAction duration={duration} tourId={_id} />
+			<CallToAction duration={duration} tourId={_id} images={[...images]} />
 		</Container>
 	);
 };
