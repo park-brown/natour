@@ -45,7 +45,7 @@ const Title = styled(Typography, { name: 'login-title' })(({ theme }) => ({
 		textTransform: 'uppercase'
 	}
 }));
-const RedditTextField = styled((props) => <TextField InputProps={{ disableUnderline: true }} {...props} />)(
+export const RedditTextField = styled((props) => <TextField InputProps={{ disableUnderline: true }} {...props} />)(
 	({ theme }) => ({
 		'& .MuiFilledInput-root': {
 			border: '1px solid #e2e2e1',

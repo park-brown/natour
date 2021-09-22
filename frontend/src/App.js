@@ -5,6 +5,7 @@ import AppHeader from './components/AppHeader/AppHeader';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import Detail from './pages/Detail/Detail';
+import Edit from './pages/Edit/Edit';
 
 function App() {
 	return (
@@ -16,6 +17,9 @@ function App() {
 				</Route>
 				<Route exact path='/login'>
 					<Login />
+				</Route>
+				<Route exact path='/edit'>
+					<Edit />
 				</Route>
 
 				<Route exact path='/:detail'>

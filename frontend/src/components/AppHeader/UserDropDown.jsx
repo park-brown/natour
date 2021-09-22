@@ -12,6 +12,7 @@ import {
 	ListItemIcon,
 	ListItemText
 } from '@mui/material';
+import { useHistory } from 'react-router';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import PersonIcon from '@mui/icons-material/Person';
@@ -46,6 +47,7 @@ const PoperInner = styled(Paper, { name: 'popper-inner' })(({ theme }) => ({
 	padding: theme.spacing(1)
 }));
 const UserDropDown = ({ user }) => {
+	const history = useHistory();
 	const { photo, name } = user;
 	const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -69,7 +71,10 @@ const UserDropDown = ({ user }) => {
 					</Typography>
 					<List>
 						<ListItem disablePadding>
-							<ListItemButton>
+							<ListItemButton
+								onClick={() => {
+									history.push('/edit');
+								}}>
 								<ListItemIcon sx={{ minWidth: '40px' }}>
 									<PersonIcon />
 								</ListItemIcon>
@@ -77,7 +82,10 @@ const UserDropDown = ({ user }) => {
 							</ListItemButton>
 						</ListItem>
 						<ListItem disablePadding>
-							<ListItemButton>
+							<ListItemButton
+								onClick={() => {
+									history.push('/edit');
+								}}>
 								<ListItemIcon sx={{ minWidth: '40px' }}>
 									<SettingsIcon />
 								</ListItemIcon>
