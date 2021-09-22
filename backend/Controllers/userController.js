@@ -2,7 +2,8 @@ const catchAsync = require('../utilities/catchAsync');
 const User = require('../Models/userModel');
 const AppError = require('../utilities/AppError');
 const { deleteOne, updateOne, getOne, getAll } = require('./handlerFactory');
-const filterObj = (obj, allowedFields) => {
+const filterObj = (obj, ...allowedFields) => {
+  console.log(allowedFields);
   const newObj = {};
   Object.keys(obj).forEach((el) => {
     if (allowedFields.includes(el)) newObj[el] = obj[el];
@@ -32,7 +33,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
   // 2) Filtered out unwanted fields names that are not allowed to be updated
   const filteredBody = filterObj(req.body, 'name', 'email');
-
+  console.log(filteredBody);
   // 3) Update user document
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,

@@ -55,19 +55,20 @@ const validationSchema = yup.object({
 
 	email: yup.string('Enter your email').email('Enter a valid email')
 });
+const filterEmptyField = (values) => {
+	const filterObj = {};
+	Object.entries(values).forEach((el) => {
+		if (el[1] !== '') {
+			filterObj[el[0]] = el[1];
+		}
+	});
+	return filterObj;
+};
 const EditAccount = () => {
 	const { user, token } = useSelector((state) => state.auth);
 	const dispatch = useDispatch();
 	const [updateMe, { data, isSuccess, isLoading }] = useUpdateMeMutation();
-	const filterEmptyField = (values) => {
-		const filterObj = {};
-		Object.entries(values).forEach((el) => {
-			if (el[1] !== '') {
-				filterObj[el[0]] = el[1];
-			}
-		});
-		return filterObj;
-	};
+
 	const formik = useFormik({
 		initialValues: {
 			name: '',
