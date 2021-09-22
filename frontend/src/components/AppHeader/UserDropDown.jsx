@@ -13,6 +13,8 @@ import {
 	ListItemText
 } from '@mui/material';
 import { useHistory } from 'react-router';
+import { logOut } from '../../Features/AuthSlice';
+import { useDispatch } from 'react-redux';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import PersonIcon from '@mui/icons-material/Person';
@@ -48,6 +50,11 @@ const PoperInner = styled(Paper, { name: 'popper-inner' })(({ theme }) => ({
 }));
 const UserDropDown = ({ user }) => {
 	const history = useHistory();
+	const dispatch = useDispatch();
+	const handleLogOut = () => {
+		dispatch(logOut());
+		history.push('/');
+	};
 	const { photo, name } = user;
 	const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -101,7 +108,7 @@ const UserDropDown = ({ user }) => {
 							</ListItemButton>
 						</ListItem>
 						<ListItem disablePadding>
-							<ListItemButton>
+							<ListItemButton onClick={handleLogOut}>
 								<ListItemIcon sx={{ minWidth: '40px' }}>
 									<PowerSettingsNewIcon />
 								</ListItemIcon>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled, alpha } from '@mui/material/styles';
-import { Box, Avatar, Typography, Button, InputBase } from '@mui/material';
+import { Box, Typography, Button, InputBase } from '@mui/material';
 import { useSelector } from 'react-redux';
 
 const LayOutContainer = styled(Box, { name: 'edit-account-layout-container' })(({ theme }) => ({
@@ -30,10 +30,6 @@ const ListItem = styled(Box, { name: 'edit-account-listItem' })(({ theme }) => (
 		}
 	}
 }));
-const ProfilePic = styled(Avatar, { name: 'profil-pic' })(({ theme }) => ({
-	width: '48px',
-	height: '48px'
-}));
 
 const CustomInputBase = styled(InputBase, { name: 'custom-input-base' })(({ theme }) => ({
 	border: '1px solid #e2e2e1',
@@ -53,7 +49,7 @@ const CustomInputBase = styled(InputBase, { name: 'custom-input-base' })(({ them
 	}
 }));
 const ChangePassword = () => {
-	const { user, token } = useSelector((state) => state.auth);
+	const { token } = useSelector((state) => state.auth);
 	return (
 		<LayOutContainer>
 			<ListItem>

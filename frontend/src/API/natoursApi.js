@@ -44,6 +44,16 @@ export const natoursApi = createApi({
 				}
 			})
 		}),
+		updateMe: builder.mutation({
+			query: ({ token, values }) => ({
+				url: 'users/updateMe',
+				method: 'PATCH',
+				headers: {
+					authorization: `Bearer ${token}`
+				},
+				body: values
+			})
+		}),
 		bookTour: builder.mutation({
 			query: ({ id, token }) => ({
 				url: `bookings/checkout-session/${id}`,
@@ -60,5 +70,6 @@ export const {
 	useGetAllReviewFromATourQuery,
 	useLoginQuery,
 	useSignUpMutation,
+	useUpdateMeMutation,
 	useBookTourMutation
 } = natoursApi;
