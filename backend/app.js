@@ -11,11 +11,12 @@ const compression = require('compression');
 const mongoSanitize = require('express-mongo-sanitize');
 const xssClean = require('xss-clean');
 const hpp = require('hpp');
-const multer = require('multer');
+const path = require('path');
 const AppError = require('./utilities/AppError');
 const GlobalErrorHandler = require('./Controllers/errorController');
 const app = express();
-
+// Serving static files
+app.use(express.static(path.join(__dirname, 'public')));
 // global  Middlewares
 // set security https headers
 app.use(helmet());
