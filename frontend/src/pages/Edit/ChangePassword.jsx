@@ -1,8 +1,13 @@
 import React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import { Box, Typography, Button, InputBase } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { Box, Button, Snackbar, Alert } from '@mui/material';
 import { useSelector } from 'react-redux';
-
+import { RedditTextField } from '../Login';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { useUpdatePasswordMutation } from '../../API/natoursApi';
+import { updateUserPassword } from '../../Features/AuthSlice';
+import { useDispatch } from 'react-redux';
 const LayOutContainer = styled(Box, { name: 'edit-account-layout-container' })(({ theme }) => ({
 	width: '100%',
 
@@ -15,6 +20,7 @@ const LayOutContainer = styled(Box, { name: 'edit-account-layout-container' })((
 const ListItem = styled(Box, { name: 'edit-account-listItem' })(({ theme }) => ({
 	[theme.breakpoints.up('xs')]: {
 		width: '100%',
+		maxWidth: '300px',
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'flex-start',
@@ -23,7 +29,10 @@ const ListItem = styled(Box, { name: 'edit-account-listItem' })(({ theme }) => (
 		textAlign: 'right'
 	},
 	[theme.breakpoints.up('sm')]: {
+		width: '100%',
+		maxWidth: '50%',
 		flexDirection: 'row',
+		justifyContent: 'center',
 		gap: '2rem',
 		'& .MuiTypography-root': {
 			flexBasis: '10rem'
@@ -31,44 +40,121 @@ const ListItem = styled(Box, { name: 'edit-account-listItem' })(({ theme }) => (
 	}
 }));
 
-const CustomInputBase = styled(InputBase, { name: 'custom-input-base' })(({ theme }) => ({
-	border: '1px solid #e2e2e1',
-	overflow: 'hidden',
-	borderRadius: 4,
-	paddingLeft: theme.spacing(2),
-	maxWidth: '350px',
-	backgroundColor: theme.palette.mode === 'light' ? '#fcfcfb' : '#2b2b2b',
-	transition: theme.transitions.create(['border-color', 'background-color', 'box-shadow']),
-	'&:hover': {
-		backgroundColor: 'transparent'
-	},
-	'&.Mui-focused': {
-		backgroundColor: 'transparent',
-		boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
-		borderColor: theme.palette.primary.main
-	}
-}));
+const validationSchema = yup.object({
+	passwordCurrent: yup
+		.string('Enter your current password')
+		.min(8, 'Password should be of minimum 8 characters length')
+		.required('Password is required'),
+
+	password: yup
+		.string('Enter your new password')
+		.min(8, 'Password should be of minimum 8 characters length')
+		.required('Password is required'),
+	passwordConfirm: yup
+		.string('confirm your new password')
+		.min(8, 'Password should be of minimum 8 characters length')
+		.required('Password is required')
+});
 const ChangePassword = () => {
+	const dispatch = useDispatch();
 	const { token } = useSelector((state) => state.auth);
+	const [updatePassword, { data, isSuccess, isError, isLoading }] = useUpdatePasswordMutation();
+	const formik = useFormik({
+		initialValues: {
+			passwordCurrent: '',
+			password: '',
+			passwordConfirm: ''
+		},
+
+		validationSchema: validationSchema,
+		validate: () => {
+			if (formik.values.password !== formik.values.passwordConfirm) {
+				return {
+					passwordConfirm: 'confirm password and password are not the same'
+				};
+			}
+		},
+
+		onSubmit: ({ passwordCurrent, password, passwordConfirm }) => {
+			const patch = {
+				passwordCurrent,
+				password,
+				passwordConfirm
+			};
+			updatePassword({ token, patch });
+		}
+	});
+	let isValid = formik.dirty && formik.isValid;
+
+	if (isSuccess) {
+		const { token } = data;
+		dispatch(updateUserPassword({ token }));
+	}
+
 	return (
 		<LayOutContainer>
+			{isSuccess && (
+				<Snackbar anchorOrigin={{ horizontal: 'center', vertical: 'top' }} open={isSuccess} autoHideDuration={600}>
+					<Alert variant='filled' severity='success' sx={{ boxShadow: 6 }}>
+						password reset success!
+					</Alert>
+				</Snackbar>
+			)}
+			{isError && (
+				<Snackbar anchorOrigin={{ horizontal: 'center', vertical: 'top' }} open={isError}>
+					<Alert variant='filled' severity='error' sx={{ boxShadow: 6 }}>
+						your current password is incorrect.
+					</Alert>
+				</Snackbar>
+			)}
 			<ListItem>
-				<Typography variant='body1'>Old password</Typography>
-				<CustomInputBase fullWidth />
+				<RedditTextField
+					label='current password'
+					fullWidth
+					id='current password'
+					name='passwordCurrent'
+					variant='filled'
+					value={formik.values.passwordCurrent}
+					onChange={formik.handleChange}
+					onBlur={formik.handleBlur}
+					error={formik.touched.passwordCurrent && Boolean(formik.errors.passwordCurrent)}
+					helperText={formik.touched.passwordCurrent && formik.errors.passwordCurrent}
+				/>
 			</ListItem>
 			<ListItem>
-				<Typography variant='body1'>New password</Typography>
-				<CustomInputBase fullWidth />
+				<RedditTextField
+					label='new password'
+					fullWidth
+					variant='filled'
+					id='new password'
+					name='password'
+					value={formik.values.password}
+					onChange={formik.handleChange}
+					onBlur={formik.handleBlur}
+					error={formik.touched.password && Boolean(formik.errors.password)}
+					helperText={formik.touched.password && formik.errors.password}
+				/>
 			</ListItem>
 			<ListItem>
-				<Typography variant='body1'>Confirm new password</Typography>
-				<CustomInputBase fullWidth />
+				<RedditTextField
+					label='confirm new password'
+					fullWidth
+					variant='filled'
+					id='confirm new password'
+					name='passwordConfirm'
+					value={formik.values.passwordConfirm}
+					onChange={formik.handleChange}
+					onBlur={formik.handleBlur}
+					error={formik.touched.passwordConfirm && Boolean(formik.errors.passwordConfirm)}
+					helperText={formik.touched.passwordConfirm && formik.errors.passwordConfirm}
+				/>
 			</ListItem>
 			<ListItem>
-				<Typography variant='body1' sx={{ visibility: 'hidden' }}>
-					Confirm new password
-				</Typography>
-				<Button variant='contained' sx={{ alignSelf: 'center' }} disabled>
+				<Button
+					variant='contained'
+					sx={{ alignSelf: 'center' }}
+					onClick={formik.handleSubmit}
+					disabled={!isValid || isLoading}>
 					change password
 				</Button>
 			</ListItem>

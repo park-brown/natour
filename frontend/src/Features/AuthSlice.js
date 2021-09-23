@@ -21,12 +21,15 @@ const AuthSlice = createSlice({
 			state.user.email = email;
 			state.user.photo = photo;
 		},
+		updateUserPassword: (state, { payload: { token } }) => {
+			state.token = token;
+		},
 		logOut: (state) => {
 			state.user = null;
 			state.token = null;
 		}
 	}
 });
-export const { setCredentials, updateUserProfile, logOut } = AuthSlice.actions;
+export const { setCredentials, updateUserProfile, updateUserPassword, logOut } = AuthSlice.actions;
 
 export default AuthSlice.reducer;
