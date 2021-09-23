@@ -11,6 +11,7 @@ const compression = require('compression');
 const mongoSanitize = require('express-mongo-sanitize');
 const xssClean = require('xss-clean');
 const hpp = require('hpp');
+const multer = require('multer');
 const AppError = require('./utilities/AppError');
 const GlobalErrorHandler = require('./Controllers/errorController');
 const app = express();
