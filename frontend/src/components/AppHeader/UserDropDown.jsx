@@ -48,6 +48,7 @@ const PoperInner = styled(Paper, { name: 'popper-inner' })(({ theme }) => ({
 
 	padding: theme.spacing(1)
 }));
+const Profile_URL = 'https://jonas-natour.herokuapp.com/img/users';
 const UserDropDown = ({ user }) => {
 	const history = useHistory();
 	const dispatch = useDispatch();
@@ -67,7 +68,7 @@ const UserDropDown = ({ user }) => {
 	return (
 		<React.Fragment>
 			<UserBox onClick={handleClick} aria-describedby={id}>
-				<HeaderAvatar src={photo} alt='user-photo' />
+				<HeaderAvatar src={`${Profile_URL}/${photo}`} alt='user-photo' />
 				<Typography variant='body2'>{name}</Typography>
 				<KeyboardArrowDownIcon />
 			</UserBox>
