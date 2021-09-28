@@ -76,7 +76,7 @@ const EditAccount = () => {
 
 		dispatch(updateUserProfile({ user }));
 	}
-	console.log(user.photo.trim());
+
 	return (
 		<LayOutContainer>
 			<ListItem>

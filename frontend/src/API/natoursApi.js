@@ -61,6 +61,7 @@ export const natoursApi = createApi({
 					headers: {
 						authorization: `Bearer ${token}`,
 						'Access-Control-Allow-Origin': '*'
+						//turn off content-type, works fine.
 						// 'Content-Type': 'multipart/form-data'
 					},
 					method: 'PATCH',
