@@ -3,7 +3,7 @@ const Tour = require('../Models/tourModel');
 const Booking = require('../Models/bookingModel');
 const catchAsync = require('../utilities/catchAsync');
 const factory = require('./handlerFactory');
-const WEBSITE__DOMAIN = 'http://localhost:3000';
+const WEBSITE__DOMAIN = 'https://vast-inlet-69002.herokuapp.com/';
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1) Get the currently booked tour
   const tour = await Tour.findById(req.params.tourId);
