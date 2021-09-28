@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box, Typography, Button, Snackbar, Alert } from '@mui/material';
-
 import { useUpdateProfileMutation } from '../../API/natoursApi';
 import { updateUserProfile } from '../../Features/AuthSlice';
 import { useDispatch } from 'react-redux';
@@ -17,6 +16,7 @@ const validationSchema = yup.object({
 const Profile = ({ user, token }) => {
 	const dispatch = useDispatch();
 	const isInitialMount = useRef(true);
+
 	const [updateProfile, { data, isSuccess, isError }] = useUpdateProfileMutation();
 
 	const formik = useFormik({
@@ -26,6 +26,7 @@ const Profile = ({ user, token }) => {
 
 		validationSchema: validationSchema
 	});
+
 	const handleProfileChange = async (event) => {
 		const files = event.target.files;
 
